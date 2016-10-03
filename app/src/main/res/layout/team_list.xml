@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/teamContainer">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/teamLogo"
+            android:layout_centerInParent="true"
+            android:layout_alignParentTop="true"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teamName"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Team Name"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/teamLogo"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/captainName"
+            android:text="Captain Name"
+            android:textStyle="bold"
+            android:layout_below="@id/teamName"
+            android:gravity="center_horizontal"
+            android:textColor="@color/abc_search_url_text_pressed" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teamCoach"
+            android:text="Team Coach"
+            android:textStyle="bold"
+            android:layout_below="@+id/captainName"
+            android:gravity="center_horizontal"
+            android:textColor="@color/abc_search_url_text_pressed"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teamOwner"
+            android:text="Owner Name"
+            android:textStyle="bold"
+            android:layout_below="@+id/teamCoach"
+            android:gravity="center_horizontal"
+            android:textColor="@color/abc_search_url_text_pressed"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/teamHome"
+            android:text="Home Venue"
+            android:textStyle="bold"
+            android:gravity="center_horizontal"
+            android:layout_below="@id/teamOwner"
+            android:textColor="@color/abc_search_url_text_pressed"/>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

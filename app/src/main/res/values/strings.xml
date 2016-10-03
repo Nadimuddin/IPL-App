@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MyIPLApp</string>
+    <string name="batting_style"><b>Batting Style: </b></string>
+    <string name="bowling_style"><b>Bowling Style: </b></string>
+    <string name="dob"><b>D.O.B.: </b></string>
+    <string name="nationality"><b>Nationality: </b></string>
+    <string name="role"><b>Role: </b></string>
+</resources>
