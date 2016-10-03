@@ -1,16 +1,13 @@
 package com.bridgelabz.myiplapp.controller;
 
 import android.content.Context;
-import android.widget.Toast;
+import android.database.Cursor;
+import android.util.Log;
 
 import com.bridgelabz.myiplapp.database.DatabaseUtil;
 import com.bridgelabz.myiplapp.model.TeamModel;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
+import com.bridgelabz.myiplapp.preference.SavePreference;
+import com.bridgelabz.myiplapp.utility.FirebaseUtil;
 
 import java.util.ArrayList;
 
@@ -19,68 +16,45 @@ import java.util.ArrayList;
  */
 public class TeamController
 {
+    public static final String TAG = "TeamController";
     TeamModel mTeamModel;
+    DatabaseUtil DBUtil;
     ArrayList<TeamModel> mArrayList;
-    Context context;
+    Context mContext;
+    FirebaseUtil FBaseUtil;
+    String PREF_KEY = "TEAM";
 
-    private Context getContext()
+    public TeamController(Context context)
     {
-        return getContext();
+        mContext = context;
     }
 
-    public TeamController(ArrayList<TeamModel> arrayList)
+    public ArrayList<TeamModel> getData(UpdateAdapter update)
     {
-        mArrayList = arrayList;
-    }
-
-
-
-    private void getFirebaseData()
-    {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-
-        //get instance of firebase database project
-        FirebaseDatabase firebaseDB = FirebaseDatabase.getInstance();
-
-        //get reference of team_info child node
-        DatabaseReference reference = firebaseDB.getReference("team_info");
-
-        reference.keepSynced(true);
-
-        //set value event listener for firebase reference
-        reference.addValueEventListener(new ValueEventListener()
+        SavePreference pref = new SavePreference(mContext);
+        String str = pref.getPreference(PREF_KEY);
+        mArrayList = new ArrayList<>();
+        if(str == null || str.equals("not saved"))
         {
-            /*
-             * onDataChange method to read a static snapshot of the contents at given JSON object
-             * This method is triggered once when the listener is attached
-             * and again every time the data changes.
-             */
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
+            Log.d(TAG, "getData: Data not saved");
+            FBaseUtil = new FirebaseUtil(mContext);
+            FBaseUtil.getFirebaseData(update);
+            pref.setPreferences(PREF_KEY, "data saved");
+        }
+        else if(str.equals("data saved"))
+        {
+            Log.d(TAG, "getData: Data saved getting from local");
+            DBUtil = new DatabaseUtil(mContext);
+            Cursor cursor = DBUtil.retrieveData();
+            while (cursor.moveToNext())
             {
-                //this is for indicating firebase what type of data we want
-                GenericTypeIndicator<ArrayList<TeamModel>> type =
-                        new GenericTypeIndicator<ArrayList<TeamModel>>() {};
-
-                //get data from Firebase into model class
-                mArrayList.addAll(dataSnapshot.getValue(type));
-
-                DatabaseUtil database = new DatabaseUtil(getContext());
-                if(database.insertData(mArrayList) == -1)
-                    Toast.makeText(getContext(), "Data not inserted", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getContext(), "Data inserted", Toast.LENGTH_SHORT).show();
-
-                adapter.notifyDataSetChanged();
+                mArrayList.add(new TeamModel(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6)));
             }
+        }
 
-            //this will called when error occur while getting data from firebase
-            @Override
-            public void onCancelled(DatabaseError databaseError)
-            {
 
-            }
-        });
+        return mArrayList;
     }
 
     public String getTeamName()

@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 public class SavePreference extends Application
 {
     //static
-    static String PREFERENCE = "IPL Preference";
+    final static String PREFERENCE = "IPL Preference";
     //static
     String BACKGROUND = "Background";
     //static
@@ -20,11 +20,7 @@ public class SavePreference extends Application
     static Context mContext;
     //static
     static SharedPreferences preferences;
-    static SavePreference mSavePref = new SavePreference();
-
-    private SavePreference()
-    {
-    }
+    //static SavePreference mSavePref = new SavePreference(mContext);
 
     /*public static SavePreference getInstance()
     {
@@ -33,14 +29,14 @@ public class SavePreference extends Application
         return mSavePref;
     }*/
 
-    public static SavePreference getInstance()
+    /*public static SavePreference getInstance()
     {
         //mContext = context;
         //preferences=contxet.getSharedPreferences(PREFERENCE,0);
         if(mSavePref == null)
             mSavePref = new SavePreference();
         return mSavePref;
-    }
+    }*/
 
 
     private Context getContext()
@@ -50,26 +46,23 @@ public class SavePreference extends Application
 
     public SavePreference(Context context) {
         mContext = context;
-        preferences=context.getSharedPreferences(PREFERENCE,0);
+        preferences=context.getSharedPreferences(PREFERENCE,mContext.MODE_PRIVATE);
     }
 
     public String getPreference(String prefForWhat)
     {
-        String str = null;
-        if(prefForWhat.equals("Background"))
+        String str = preferences.getString(prefForWhat, null);
+        /*if(prefForWhat.equals("Background"))
             str = preferences.getString(BACKGROUND, null);
         if(prefForWhat.equals("Logo"))
-            str = preferences.getString(LOGO, null);
+            str = preferences.getString(LOGO, null);*/
         return str;
     }
 
-    public void setPreferences(String stringToSet, String prefOfWhat)
+    public void setPreferences(String prefForWhat, String stringToSet)
     {
         SharedPreferences.Editor editor = preferences.edit();
-        if(prefOfWhat.equals("Background"))
-            editor.putString(BACKGROUND, stringToSet);
-        if(prefOfWhat.equals("Logo"))
-            editor.putString(LOGO, stringToSet);
+        editor.putString(prefForWhat, stringToSet);
     }
 
     private SharedPreferences getPrefs(Context context) {

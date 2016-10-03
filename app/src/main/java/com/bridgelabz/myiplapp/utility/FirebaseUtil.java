@@ -3,6 +3,8 @@ package com.bridgelabz.myiplapp.utility;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.bridgelabz.myiplapp.MainActivity;
+import com.bridgelabz.myiplapp.controller.UpdateAdapter;
 import com.bridgelabz.myiplapp.database.DatabaseUtil;
 import com.bridgelabz.myiplapp.model.TeamModel;
 import com.google.firebase.database.DataSnapshot;
@@ -15,16 +17,21 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- * Created by bridgelabz1 on 3/10/16.
+ * Created by Nadimuddin on 3/10/16.
  */
 public class FirebaseUtil
 {
-    public Context getContext()
+    ArrayList<TeamModel> mArrayList;
+    Context mContext;
+
+    public FirebaseUtil(Context context)
     {
-        return getContext();
+        mContext = context;
+        mArrayList = new ArrayList<>();
     }
 
-    private void getFirebaseData()
+
+    public void getFirebaseData(final UpdateAdapter update)
     {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
@@ -54,20 +61,19 @@ public class FirebaseUtil
                 //get data from Firebase into model class
                 mArrayList.addAll(dataSnapshot.getValue(type));
 
-                DatabaseUtil database = new DatabaseUtil(getContext());
-                if(database.insertData(mArrayList) == -1)
-                    Toast.makeText(getContext(), "Data not inserted", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getContext(), "Data inserted", Toast.LENGTH_SHORT).show();
+                update.updateAdapter(mArrayList);
 
-                adapter.notifyDataSetChanged();
+                DatabaseUtil database = new DatabaseUtil(mContext);
+                if(database.insertData(mArrayList) == -1)
+                    Toast.makeText(mContext, "Data not inserted", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(mContext, "Data inserted", Toast.LENGTH_SHORT).show();
             }
 
             //this will called when error occur while getting data from firebase
             @Override
             public void onCancelled(DatabaseError databaseError)
             {
-
             }
         });
     }

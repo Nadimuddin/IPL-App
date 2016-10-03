@@ -14,6 +14,20 @@ public class TeamModel {
 
     public TeamModel() {    }
 
+    public TeamModel(String teamName, String captain, String coach, String owner, String homeVenue,
+                     String backgroundUrl, String logoUrl)
+    {
+        team_name = teamName;
+        team_captain = captain;
+        team_coach = coach;
+        team_owner = owner;
+        team_home_venue = homeVenue;
+        team_background = backgroundUrl;
+        team_img_url = logoUrl;
+    }
+
+
+
     public String getTeamName()
     {
         return team_name;
