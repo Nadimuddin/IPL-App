@@ -11,7 +11,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bridgelabz.myiplapp.adapter.IPLAdapter;
 import com.bridgelabz.myiplapp.controller.TeamController;
-import com.bridgelabz.myiplapp.controller.UpdateAdapter;
+import com.bridgelabz.myiplapp.interfaces.UpdateAdapter;
 import com.bridgelabz.myiplapp.model.TeamModel;
 
 import java.util.ArrayList;
@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity
 {
     RecyclerView mRecyclerView;
     ArrayList<TeamModel> mArrayList;
-    IPLAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +35,14 @@ public class MainActivity extends AppCompatActivity
         //set Layout for
         setLayoutForRecyclerView();
 
-
+        //initializing controller
         TeamController controller = new TeamController(this);
 
+        //get data & set to adapter
         controller.getData(new UpdateAdapter() {
             @Override
-            public void updateAdapter(ArrayList<TeamModel> arrayList) {
+            public void updateAdapter(ArrayList<TeamModel> arrayList)
+            {
                 IPLAdapter adapter =new IPLAdapter(arrayList);
                 mRecyclerView.setAdapter(adapter);
             }

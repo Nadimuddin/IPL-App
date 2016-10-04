@@ -1,4 +1,4 @@
-package com.bridgelabz.myiplapp.controller;
+package com.bridgelabz.myiplapp.interfaces;
 
 import com.bridgelabz.myiplapp.model.TeamModel;
 

@@ -1,10 +1,10 @@
 package com.bridgelabz.myiplapp.utility;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
-import com.bridgelabz.myiplapp.MainActivity;
-import com.bridgelabz.myiplapp.controller.UpdateAdapter;
+import com.bridgelabz.myiplapp.interfaces.UpdateAdapter;
 import com.bridgelabz.myiplapp.database.DatabaseUtil;
 import com.bridgelabz.myiplapp.model.TeamModel;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +21,8 @@ import java.util.ArrayList;
  */
 public class FirebaseUtil
 {
+    private static final String TAG = "FirebaseUtil";
+
     ArrayList<TeamModel> mArrayList;
     Context mContext;
 
@@ -60,6 +62,7 @@ public class FirebaseUtil
 
                 //get data from Firebase into model class
                 mArrayList.addAll(dataSnapshot.getValue(type));
+                Log.d(TAG, "onDataChange: data downloaded for firebase");
 
                 update.updateAdapter(mArrayList);
 

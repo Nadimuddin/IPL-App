@@ -6,29 +6,20 @@ import android.graphics.drawable.BitmapDrawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.bridgelabz.myiplapp.TeamViewHolder;
-import com.bridgelabz.myiplapp.adapter.IPLAdapter;
-import com.bridgelabz.myiplapp.model.TeamModel;
+import com.bridgelabz.myiplapp.view_holder.ViewHolder;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-
-import java.util.ArrayList;
 
 /**
  * Created by Nadimuddin on 26/9/16.
  */
 public class DownloadImage
 {
+    private static final String TAG = "DownloadImage";
     ImageUtil imageUtil;
-    public void downloadImage(final String imageURL, final TeamViewHolder holder)
+    public void downloadImage(final String imageURL, final ViewHolder holder)
     {
         imageUtil = new ImageUtil();
 
@@ -51,6 +42,7 @@ public class DownloadImage
             public void onSuccess(byte[] bytes)
             {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                Log.e(TAG, "onSuccess: Image downloaded");
 
                 /*
                  *if image URL contains word 'Background'
@@ -81,8 +73,11 @@ public class DownloadImage
                  * then save image in folder of corresponding team name
                  */
                 else if(imageURL.contains("_"))
+                {
                     imageUtil.saveToInternalStorage(bitmap, imageURL.substring(0, imageURL.indexOf('/')),
-                                    imageURL.substring(imageURL.indexOf('/')+1));
+                            imageURL.substring(imageURL.indexOf('/') + 1));
+                    holder.playerPic.setImageBitmap(bitmap);
+                }
 
             }
         }).addOnFailureListener(new OnFailureListener() {

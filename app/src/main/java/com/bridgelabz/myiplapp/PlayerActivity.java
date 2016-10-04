@@ -29,9 +29,13 @@ public class PlayerActivity extends AppCompatActivity implements TabLayout.OnTab
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tab_container);
 
+        //get intent i.e. team name
         String string = getIntent().getExtras().getString(VALUE);
         String key = string.replaceAll("\\s+","");
 
+        /*
+         * get XML layout
+         */
         mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
         mViewPager = (ViewPager)findViewById(R.id.viewPager);
         getFirebaseData(key);
@@ -80,12 +84,15 @@ public class PlayerActivity extends AppCompatActivity implements TabLayout.OnTab
 
                 //get data from Firebase into model class
                 ArrayList<PlayerModel> arrayList = dataSnapshot.getValue(type);
+
                 PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), arrayList);
                 mViewPager.setAdapter(adapter);
+
+                //setup view pager
                 mTabLayout.setupWithViewPager(mViewPager);
             }
 
-            //this will called when error occur while getting data from firebase
+            //this method will called when error occur while getting data from firebase
             @Override
             public void onCancelled(DatabaseError databaseError) {
 

@@ -6,26 +6,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bridgelabz.myiplapp.R;
 import com.bridgelabz.myiplapp.model.PlayerModel;
 import com.bridgelabz.myiplapp.utility.DownloadImage;
 import com.bridgelabz.myiplapp.utility.ImageUtil;
+import com.bridgelabz.myiplapp.view_holder.ViewHolder;
 
 /**
  * Created by Nadimuddin on 28/9/16.
  */
 public class PlayerFragment extends Fragment
 {
-    ImageView mPlayerPic;
+    /*ImageView mPlayerPic;
     TextView mPlayerName;
     TextView mBattingStyle;
     TextView mBowlingStyle;
     TextView mDOB;
     TextView mNationality;
-    TextView mRole;
+    TextView mRole;*/
     View mView;
     ImageUtil mImageUtil = new ImageUtil();
 
@@ -50,39 +49,31 @@ public class PlayerFragment extends Fragment
         //inflate layout for this fragment
         mView = inflater.inflate(R.layout.tabs, container, false);
 
-        /*
-         *getting XML objects
-         */
-        mPlayerPic = (ImageView)mView.findViewById(R.id.playerPic);
-        mPlayerName = (TextView)mView.findViewById(R.id.playerName);
-        mBattingStyle = (TextView)mView.findViewById(R.id.battingStyle);
-        mBowlingStyle = (TextView)mView.findViewById(R.id.bowlingStyle);
-        mDOB = (TextView)mView.findViewById(R.id.dOB);
-        mNationality = (TextView)mView.findViewById(R.id.nationality);
-        mRole = (TextView)mView.findViewById(R.id.role);
+        //calling Holder to get views
+        ViewHolder holder = new ViewHolder(mView);
 
         //get arguments in bundle
         Bundle bundle=getArguments();
         PlayerModel playerModel= (PlayerModel) bundle.getSerializable("VALUE");
 
-        setPlayerInfo(playerModel);
+        setPlayerInfo(playerModel, holder);
 
         return mView;
     }
 
     //set player info on textView in layout
-    public void setPlayerInfo(PlayerModel model)
+    public void setPlayerInfo(PlayerModel model, ViewHolder holder)
     {
-        mPlayerPic.setImageBitmap(getPlayerPic(model.getPlayerImgUrl()));
-        mPlayerName.setText(model.getPlayerName());
-        mBattingStyle.setText(model.getBattingStyle());
-        mBowlingStyle.setText(model.getBowlingStyle());
-        mDOB.setText(model.getDOB());
-        mNationality.setText(model.getNationality());
-        mRole.setText(model.getRole());
+        holder.playerPic.setImageBitmap(getPlayerPic(model.getPlayerImgUrl(), holder));
+        holder.playerName.setText(model.getPlayerName());
+        holder.battingStyle.setText(model.getBattingStyle());
+        holder.bowlingStyle.setText(model.getBowlingStyle());
+        holder.dOB.setText(model.getDOB());
+        holder.nationality.setText(model.getNationality());
+        holder.role.setText(model.getRole());
     }
 
-    private Bitmap getPlayerPic(String imageURL)
+    private Bitmap getPlayerPic(String imageURL, ViewHolder holder)
     {
         Bitmap bitmap;
         DownloadImage firebase = new DownloadImage();
@@ -102,7 +93,7 @@ public class PlayerFragment extends Fragment
         else
         {
             //download image from firebase
-            firebase.downloadImage(imageURL, null);
+            firebase.downloadImage(imageURL, holder);
 
             //get image from local memory
             bitmap = mImageUtil.getImage(folderName, picName);

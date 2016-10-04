@@ -28,12 +28,8 @@ public class ImageUtil
         try {
             directory = new File(mRoot+"/"+IPL_FOLDER+"/"+folderName);
             if(!directory.exists())
-            {
                 //create directory
                 directory.mkdirs();
-                Log.i(TAG, "saveToInternalStorage: directory created"+directory);
-            }
-
 
             //create file in given directory
             File file = new File(directory, fileName);
@@ -44,6 +40,7 @@ public class ImageUtil
 
             OutputStream out = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            Log.i(TAG, "saveToInternalStorage: Image stored in local directory:"+directory+"/"+fileName);
             out.flush();
             out.close();
 

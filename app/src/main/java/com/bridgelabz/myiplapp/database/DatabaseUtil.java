@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.bridgelabz.myiplapp.model.TeamModel;
+import com.bridgelabz.myiplapp.preference.SavePreference;
 
 import java.util.ArrayList;
 
@@ -22,24 +23,33 @@ public class DatabaseUtil extends SQLiteOpenHelper
     private static final String COL3 = "coach";
     private static final String COL4 = "owner";
     private static final String COL5 = "home_venue";
-    public static final String COL6 = "background_url";
-    public static final String COL7 = "logo_url";
+    private static final String COL6 = "background_url";
+    private static final String COL7 = "logo_url";
+    private static final String KEY = "DATABASE_TABLE";
 
-    ArrayList<TeamModel> mArrayList;
+    SavePreference pref;
+
     public DatabaseUtil(Context context)
     {
         super(context, DATABASE_NAME, null, 1);
 
-        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        sqLiteDatabase.execSQL("Drop table if exists "+TABLE_NAME);
-        sqLiteDatabase.execSQL("create table "+TABLE_NAME+"(" +
-                COL1+" text," +
-                COL2+" text," +
-                COL3+" text," +
-                COL4+" text," +
-                COL5+" text," +
-                COL6+" text," +
-                COL7+" text)");
+        pref = new SavePreference(context);
+        String temp = pref.getPreference(KEY);
+
+        if(temp == null || !temp.equals("table created"))
+        {
+            SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+            sqLiteDatabase.execSQL("Drop table if exists "+TABLE_NAME);
+            sqLiteDatabase.execSQL("create table "+TABLE_NAME+"(" +
+                    COL1+" text," +
+                    COL2+" text," +
+                    COL3+" text," +
+                    COL4+" text," +
+                    COL5+" text," +
+                    COL6+" text," +
+                    COL7+" text)");
+            pref.setPreferences(KEY, "table created");
+        }
     }
 
     @Override
@@ -49,14 +59,14 @@ public class DatabaseUtil extends SQLiteOpenHelper
          * method to create table
          * it accepts SQL statement to create table
          */
-        sqLiteDatabase.execSQL("create table "+TABLE_NAME+"(" +
+        /*sqLiteDatabase.execSQL("create table "+TABLE_NAME+"(" +
                 COL1+" text," +
                 COL2+" text," +
                 COL3+" text," +
                 COL4+" text," +
                 COL5+" text," +
                 COL6+" text," +
-                COL7+" text)");
+                COL7+" text)");*/
     }
 
     @Override
