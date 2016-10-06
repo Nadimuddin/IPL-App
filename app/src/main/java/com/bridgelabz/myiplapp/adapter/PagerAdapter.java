@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.bridgelabz.myiplapp.fragment.PlayerFragment;
-import com.bridgelabz.myiplapp.model.PlayerModel;
+import com.bridgelabz.myiplapp.data_model.PlayerModel;
 
 import java.util.ArrayList;
 

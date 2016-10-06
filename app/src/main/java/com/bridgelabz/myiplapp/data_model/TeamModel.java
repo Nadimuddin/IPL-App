@@ -1,4 +1,4 @@
-package com.bridgelabz.myiplapp.model;
+package com.bridgelabz.myiplapp.data_model;
 
 /**
  * Created by Nadimuddin on 22/9/16.

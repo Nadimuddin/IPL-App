@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.bridgelabz.myiplapp.PlayerActivity;
 import com.bridgelabz.myiplapp.R;
-import com.bridgelabz.myiplapp.model.TeamModel;
+import com.bridgelabz.myiplapp.data_model.TeamModel;
 import com.bridgelabz.myiplapp.view_holder.ViewHolder;
 import com.bridgelabz.myiplapp.utility.DownloadImage;
 import com.bridgelabz.myiplapp.utility.ImageUtil;
@@ -60,27 +60,40 @@ public class IPLAdapter extends RecyclerView.Adapter<ViewHolder>
 
         mHolder = holder;
 
+
         //get URL for background image
         String backgroundURL = teamModel.getTeamBackgroundURL();
 
         //extract image name from URL
         String backgroundImgName = backgroundURL.substring(backgroundURL.indexOf('/')+1);
 
-        //
+        //get image for background
         Bitmap bitmap = imageUtil.getImage("Background", backgroundImgName);
+
+        /*
+         *if null gets from local storage then download image from firebase
+         *otherwise load image from local storage
+         */
         if(bitmap != null)
-            //set background image
             holder.layout.setBackground(new BitmapDrawable(bitmap));
         else
             firebase.downloadImage(backgroundURL, holder);
 
 
+        //get URL of logo image
         String logoURL = teamModel.getTeamLogo();
+
+        //extract logo name from URL
         String logoName = logoURL.substring(logoURL.indexOf('/')+1);
 
+        //get team logo
         Bitmap bitmapImage = imageUtil.getImage("Logo", logoName);
+
+        /*
+         *if null gets from local storage then download image from firebase
+         *otherwise load image from local memory
+         */
         if(bitmapImage != null)
-            //set image logo
             holder.teamLogo.setImageBitmap(bitmapImage);
         else
             firebase.downloadImage(logoURL, holder);

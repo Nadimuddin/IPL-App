@@ -11,8 +11,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.bridgelabz.myiplapp.adapter.IPLAdapter;
 import com.bridgelabz.myiplapp.controller.TeamController;
-import com.bridgelabz.myiplapp.interfaces.UpdateAdapter;
-import com.bridgelabz.myiplapp.model.TeamModel;
+import com.bridgelabz.myiplapp.interfaces.UpdateTeamAdapter;
+import com.bridgelabz.myiplapp.data_model.TeamModel;
 
 import java.util.ArrayList;
 
@@ -39,14 +39,15 @@ public class MainActivity extends AppCompatActivity
         TeamController controller = new TeamController(this);
 
         //get data & set to adapter
-        controller.getData(new UpdateAdapter() {
+        controller.getData(new UpdateTeamAdapter() {
             @Override
             public void updateAdapter(ArrayList<TeamModel> arrayList)
             {
                 IPLAdapter adapter =new IPLAdapter(arrayList);
                 mRecyclerView.setAdapter(adapter);
             }
-        });
+
+        }, "team_info");
     }
 
     //method for setting layout for RecyclerView

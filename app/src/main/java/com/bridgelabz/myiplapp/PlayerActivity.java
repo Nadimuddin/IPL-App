@@ -6,7 +6,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.bridgelabz.myiplapp.adapter.PagerAdapter;
-import com.bridgelabz.myiplapp.model.PlayerModel;
+import com.bridgelabz.myiplapp.controller.PlayerController;
+import com.bridgelabz.myiplapp.interfaces.UpdatePlayerAdapter;
+import com.bridgelabz.myiplapp.data_model.PlayerModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,23 +40,31 @@ public class PlayerActivity extends AppCompatActivity implements TabLayout.OnTab
          */
         mTabLayout = (TabLayout)findViewById(R.id.tabLayout);
         mViewPager = (ViewPager)findViewById(R.id.viewPager);
-        getFirebaseData(key);
+
+        PlayerController controller = new PlayerController(this);
+        controller.getData(new UpdatePlayerAdapter() {
+            @Override
+            public void updateAdapter(ArrayList<PlayerModel> arrayList) {
+                PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), arrayList);
+                mViewPager.setAdapter(adapter);
+            }
+        }, key);
+        //getFirebaseData(key);
     }
 
     @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-
+    public void onTabSelected(TabLayout.Tab tab)
+    {
     }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
+    public void onTabUnselected(TabLayout.Tab tab)
+    {
     }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab)
     {
-
     }
 
     private void getFirebaseData(String key)

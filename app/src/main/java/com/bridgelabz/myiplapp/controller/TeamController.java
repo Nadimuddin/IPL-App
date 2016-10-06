@@ -5,8 +5,8 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.bridgelabz.myiplapp.database.DatabaseUtil;
-import com.bridgelabz.myiplapp.interfaces.UpdateAdapter;
-import com.bridgelabz.myiplapp.model.TeamModel;
+import com.bridgelabz.myiplapp.interfaces.UpdateTeamAdapter;
+import com.bridgelabz.myiplapp.data_model.TeamModel;
 import com.bridgelabz.myiplapp.preference.SavePreference;
 import com.bridgelabz.myiplapp.utility.FirebaseUtil;
 
@@ -30,7 +30,7 @@ public class TeamController
     }
 
     //get data from firebase or local
-    public void getData(UpdateAdapter update)
+    public void getData(UpdateTeamAdapter update, String key)
     {
         //initializing object of SharedPreference
         SavePreference pref = new SavePreference(mContext);
@@ -47,14 +47,13 @@ public class TeamController
             FirebaseUtil fireBaseUtil = new FirebaseUtil(mContext);
 
             //get data from firebase
-            fireBaseUtil.getFirebaseData(update);
+            fireBaseUtil.getFirebaseData(update, null, key);
 
             /*
-             *set preference that data is saved in local
-             *so that next time data will be load from local database
+             * set preference that data is saved in local
+             * so that next time data will be load from local database
              */
             pref.setPreferences(PREF_KEY, "data saved in local");
-            pref.getPreference(PREF_KEY);
         }
         else if(str.equals("data saved in local"))
         {
@@ -62,10 +61,10 @@ public class TeamController
             ArrayList<TeamModel> arrayList = new ArrayList<>();
 
             //initializing DatabaseUtil class
-            DatabaseUtil dataBaseUtil = new DatabaseUtil(mContext);
+            DatabaseUtil dataBaseUtil = new DatabaseUtil(mContext, key);
 
             //retrieving data from local database
-            Cursor cursor = dataBaseUtil.retrieveData();
+            Cursor cursor = dataBaseUtil.retrieveData(key);
             while (cursor.moveToNext())
             {
                 arrayList.add(new TeamModel(cursor.getString(0),

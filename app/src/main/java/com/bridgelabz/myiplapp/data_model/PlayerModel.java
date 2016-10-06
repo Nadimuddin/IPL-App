@@ -1,4 +1,4 @@
-package com.bridgelabz.myiplapp.model;
+package com.bridgelabz.myiplapp.data_model;
 
 import java.io.Serializable;
 
@@ -7,18 +7,33 @@ import java.io.Serializable;
  */
 public class PlayerModel implements Serializable
 {
-    public String background_image_name;
-    public String player_batting_style;
-    public String player_bowling_style;
-    public String player_dob;
-    public String player_img_url;
-    public String player_name;
-    public String player_nationality;
-    public String player_role;
+    String player_name;
+    String player_batting_style;
+    String player_bowling_style;
+    String player_dob;
+    String player_nationality;
+    String player_role;
+    String player_img_url;
+    String background_image_name;
 
+    public PlayerModel()
+    {
+
+    }
+
+    public PlayerModel(String playerName, String battingStyle, String bowlingStyle, String dOB,
+                       String nationality,String role, String imageURL)
+    {
+
+    }
     public String getBackgroundImageName()
     {
         return background_image_name;
+    }
+
+    public String getPlayerName()
+    {
+        return player_name;
     }
 
     public String getBattingStyle()
@@ -39,11 +54,6 @@ public class PlayerModel implements Serializable
     public String getPlayerImgUrl()
     {
         return player_img_url;
-    }
-
-    public String getPlayerName()
-    {
-        return player_name;
     }
 
     public String getNationality()

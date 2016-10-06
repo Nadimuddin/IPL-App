@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bridgelabz.myiplapp.R;
-import com.bridgelabz.myiplapp.model.PlayerModel;
+import com.bridgelabz.myiplapp.data_model.PlayerModel;
 import com.bridgelabz.myiplapp.utility.DownloadImage;
 import com.bridgelabz.myiplapp.utility.ImageUtil;
 import com.bridgelabz.myiplapp.view_holder.ViewHolder;

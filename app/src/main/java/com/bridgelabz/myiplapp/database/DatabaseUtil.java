@@ -6,7 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.bridgelabz.myiplapp.model.TeamModel;
+import com.bridgelabz.myiplapp.data_model.PlayerModel;
+import com.bridgelabz.myiplapp.data_model.TeamModel;
 import com.bridgelabz.myiplapp.preference.SavePreference;
 
 import java.util.ArrayList;
@@ -17,21 +18,23 @@ import java.util.ArrayList;
 public class DatabaseUtil extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME = "IPL_Database.db";
-    private static final String TABLE_NAME = "Ipl_team";
-    private static final String COL1 = "team_name";
-    private static final String COL2 = "captain";
-    private static final String COL3 = "coach";
-    private static final String COL4 = "owner";
-    private static final String COL5 = "home_venue";
-    private static final String COL6 = "background_url";
-    private static final String COL7 = "logo_url";
-    private static final String KEY = "DATABASE_TABLE";
+    private static String TABLE_NAME;
+    private static String COL1;
+    private static String COL2;
+    private static String COL3;
+    private static String COL4;
+    private static String COL5;
+    private static String COL6;
+    private static String COL7;
+    private static String KEY;
 
     SavePreference pref;
 
-    public DatabaseUtil(Context context)
+    public DatabaseUtil(Context context, String key)
     {
         super(context, DATABASE_NAME, null, 1);
+        TABLE_NAME = key;
+        KEY = key+"_table";
 
         pref = new SavePreference(context);
         String temp = pref.getPreference(KEY);
@@ -40,6 +43,26 @@ public class DatabaseUtil extends SQLiteOpenHelper
         {
             SQLiteDatabase sqLiteDatabase = getWritableDatabase();
             sqLiteDatabase.execSQL("Drop table if exists "+TABLE_NAME);
+            if(key.equals("team_info"))
+            {
+                COL1 = "team_name";
+                COL2 = "captain";
+                COL3 = "coach";
+                COL4 = "owner";
+                COL5 = "home_venue";
+                COL6 = "background_url";
+                COL7 = "logo_url";
+            }
+            else
+            {
+                COL1 = "player_name";
+                COL2 = "batting_style";
+                COL3 = "bowling_style";
+                COL4 = "dob";
+                COL5 = "home_venue";
+                COL6 = "player_image_url";
+                COL7 = "role";
+            }
             sqLiteDatabase.execSQL("create table "+TABLE_NAME+"(" +
                     COL1+" text," +
                     COL2+" text," +
@@ -55,18 +78,6 @@ public class DatabaseUtil extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase)
     {
-        /*
-         * method to create table
-         * it accepts SQL statement to create table
-         */
-        /*sqLiteDatabase.execSQL("create table "+TABLE_NAME+"(" +
-                COL1+" text," +
-                COL2+" text," +
-                COL3+" text," +
-                COL4+" text," +
-                COL5+" text," +
-                COL6+" text," +
-                COL7+" text)");*/
     }
 
     @Override
@@ -74,7 +85,7 @@ public class DatabaseUtil extends SQLiteOpenHelper
 
     }
 
-    public long insertData(ArrayList<TeamModel> arrayList)
+    public long insertDataForTeam(ArrayList<TeamModel> arrayList)
     {
         //get database to be writable
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
@@ -101,11 +112,37 @@ public class DatabaseUtil extends SQLiteOpenHelper
         return result;
     }
 
-    public Cursor retrieveData()
+    public long insertDataForPlayer(ArrayList<PlayerModel> arrayList)
+    {
+        //get database to be writable
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+
+        long result = 0;
+        PlayerModel model;
+        ContentValues values = new ContentValues();
+
+        for(int i=0; i<arrayList.size(); i++)
+        {
+            model = arrayList.get(i);
+            values.put(COL1, model.getPlayerName());
+            values.put(COL2, model.getBattingStyle());
+            values.put(COL3, model.getBowlingStyle());
+            values.put(COL4, model.getDOB());
+            values.put(COL5, model.getNationality());
+            values.put(COL6, model.getRole());
+            values.put(COL7, model.getPlayerImgUrl());
+
+            result =  sqLiteDatabase.insert(TABLE_NAME, null, values);
+            if(result == -1)
+                break;
+        }
+        return result;
+    }
+    public Cursor retrieveData(String table_name)
     {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
-        Cursor result = sqLiteDatabase.rawQuery("select * from "+TABLE_NAME, null);
+        Cursor result = sqLiteDatabase.rawQuery("select * from "+table_name, null);
 
         return result;
     }
