@@ -5,19 +5,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.bridgelabz.myiplapp.fragment.PlayerFragment;
-import com.bridgelabz.myiplapp.data_model.PlayerModel;
+import com.bridgelabz.myiplapp.view_model.PlayerViewModel;
 
 import java.util.ArrayList;
 
 /**
  * Created by Nadimuddin on 28/9/16.
  */
-public class PagerAdapter extends FragmentPagerAdapter
+public class PlayerAdapter extends FragmentPagerAdapter
 {
     ArrayList<PlayerFragment> mFragmentList = new ArrayList<>();
-    ArrayList<PlayerModel> mPlayerList;
+    ArrayList<PlayerViewModel> mPlayerList;
+
+    //to count number of tabs
     int mTabCount;
-    public PagerAdapter(FragmentManager fm, ArrayList<PlayerModel> playerList)
+
+    //constructor
+    public PlayerAdapter(FragmentManager fm, ArrayList<PlayerViewModel> playerList)
     {
         super(fm);
         mPlayerList = playerList;

@@ -12,27 +12,30 @@ import android.widget.Toast;
 
 import com.bridgelabz.myiplapp.PlayerActivity;
 import com.bridgelabz.myiplapp.R;
-import com.bridgelabz.myiplapp.data_model.TeamModel;
+import com.bridgelabz.myiplapp.data_model.TeamDataModel;
 import com.bridgelabz.myiplapp.view_holder.ViewHolder;
 import com.bridgelabz.myiplapp.utility.DownloadImage;
 import com.bridgelabz.myiplapp.utility.ImageUtil;
+import com.bridgelabz.myiplapp.view_model.TeamViewModel;
 
 import java.util.ArrayList;
 
 /**
  * Created by Nadimuddin on 22/9/16.
  */
-public class IPLAdapter extends RecyclerView.Adapter<ViewHolder>
+public class TeamAdapter extends RecyclerView.Adapter<ViewHolder>
 {
-    private static final String TAG = "IPLAdapter";
+    private static final String TAG = "TeamAdapter";
     final String KEY = "IPL_TEAM";
-    ArrayList<TeamModel> mArrayList;
+    ArrayList<TeamViewModel> mArrayViewList;
+    ImageUtil mImageUtil;
     ViewHolder mHolder;
 
     //constructor
-    public IPLAdapter(ArrayList<TeamModel> arrayList)
+    public TeamAdapter(ArrayList<TeamViewModel> arrayViewList)
     {
-        mArrayList = arrayList;
+        mArrayViewList = arrayViewList;
+        mImageUtil = new ImageUtil();
     }
 
     @Override
@@ -52,80 +55,60 @@ public class IPLAdapter extends RecyclerView.Adapter<ViewHolder>
         //initialize object for downloading image from firebase
         DownloadImage firebase = new DownloadImage();
 
-        //initializing object to save image in local storage
-        ImageUtil imageUtil = new ImageUtil();
-
-        //get current TeamModel object
-        final TeamModel teamModel = mArrayList.get(position);
-
+        //get current TeamViewModel object
+        final TeamViewModel teamViewModel = mArrayViewList.get(position);
         mHolder = holder;
 
 
-        //get URL for background image
-        String backgroundURL = teamModel.getTeamBackgroundURL();
-
-        //extract image name from URL
-        String backgroundImgName = backgroundURL.substring(backgroundURL.indexOf('/')+1);
-
         //get image for background
-        Bitmap bitmap = imageUtil.getImage("Background", backgroundImgName);
+        Bitmap bitmap = getBackgroundImage(teamViewModel.getTeamBackgroundURL());
 
-        /*
-         *if null gets from local storage then download image from firebase
-         *otherwise load image from local storage
-         */
+        /* if null gets from local storage then download image from firebase
+         * otherwise load image from local storage   */
         if(bitmap != null)
             holder.layout.setBackground(new BitmapDrawable(bitmap));
         else
-            firebase.downloadImage(backgroundURL, holder);
+            firebase.downloadImage(teamViewModel.getTeamBackgroundURL(), holder);
 
-
-        //get URL of logo image
-        String logoURL = teamModel.getTeamLogo();
-
-        //extract logo name from URL
-        String logoName = logoURL.substring(logoURL.indexOf('/')+1);
 
         //get team logo
-        Bitmap bitmapImage = imageUtil.getImage("Logo", logoName);
+        Bitmap bitmapImage = getTeamLogo(teamViewModel.getLogoURL());
 
-        /*
-         *if null gets from local storage then download image from firebase
-         *otherwise load image from local memory
-         */
+        /* if null gets from local storage then download image from firebase
+         * otherwise load image from local memory   */
         if(bitmapImage != null)
             holder.teamLogo.setImageBitmap(bitmapImage);
         else
-            firebase.downloadImage(logoURL, holder);
+            firebase.downloadImage(teamViewModel.getLogoURL(), holder);
 
 
         //set team name
-        holder.teamName.setText(teamModel.getTeamName());
+        holder.teamName.setText(teamViewModel.getTeamName());
 
         //set name of captain
-        holder.captain.setText(teamModel.getTeamCaptain());
+        holder.captain.setText(teamViewModel.getCaptain());
 
         //set name of coach
-        holder.coach.setText(teamModel.getTeamCoach());
+        holder.coach.setText(teamViewModel.getCoach());
 
         //set name of team owner
-        holder.owner.setText(teamModel.getTeamOwner());
+        holder.owner.setText(teamViewModel.getOwner());
 
         //set home venue of team
-        holder.homeVenue.setText(teamModel.getTeamHomeVenue());
+        holder.homeVenue.setText(teamViewModel.getHomeVenue());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(mHolder.layout.getContext(), teamModel.getTeamName()+" position: "+position,
+                Toast.makeText(mHolder.layout.getContext(), teamViewModel.getTeamName()+" position: "+position,
                         Toast.LENGTH_SHORT).show();
 
                 //Intent to open another activity to show players of team
                 Intent intent = new Intent(mHolder.layout.getContext(), PlayerActivity.class);
 
                 //pass name of team to another activity
-                intent.putExtra(KEY, teamModel.getTeamName());
+                intent.putExtra(KEY, teamViewModel.getTeamName());
 
                 //start new activity to show player's info
                 mHolder.layout.getContext().startActivity(intent);
@@ -136,7 +119,29 @@ public class IPLAdapter extends RecyclerView.Adapter<ViewHolder>
     @Override
     public int getItemCount()
     {
-        return mArrayList.size();
+        return mArrayViewList.size();
+    }
+
+    private Bitmap getBackgroundImage(String backgroundURL)
+    {
+        //extract image name from URL
+        String backgroundImgName = backgroundURL.substring(backgroundURL.indexOf('/')+1);
+
+        //get image for background
+        Bitmap bitmap = mImageUtil.getImage("Background", backgroundImgName);
+        return bitmap;
+    }
+
+    private Bitmap getTeamLogo(String logoURL)
+    {
+        //extract logo name from URL
+        String logoName = logoURL.substring(logoURL.indexOf('/')+1);
+
+        //get team logo
+        Bitmap bitmap = mImageUtil.getImage("Logo", logoName);
+
+        //return bitmap image of logo
+        return bitmap;
     }
 
 }

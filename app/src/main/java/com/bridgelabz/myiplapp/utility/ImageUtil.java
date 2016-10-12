@@ -61,6 +61,7 @@ public class ImageUtil
         //get bitmap image from the directory
         Bitmap bitmap = BitmapFactory.decodeFile(mRoot+"/"+IPL_FOLDER+"/"+folderName+"/"+fileName);
 
+        //return bitmap image
         return bitmap;
     }
 

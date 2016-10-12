@@ -1,6 +1,7 @@
 package com.bridgelabz.myiplapp.interfaces;
 
-import com.bridgelabz.myiplapp.data_model.TeamModel;
+import com.bridgelabz.myiplapp.data_model.TeamDataModel;
+import com.bridgelabz.myiplapp.view_model.TeamViewModel;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,6 @@ import java.util.ArrayList;
  */
 public interface UpdateTeamAdapter
 {
-    void updateAdapter(ArrayList<TeamModel> arrayList);
-    //void updatePlayerAdapter(ArrayList<PlayerModel> arrayList);
+    void updateAdapter(ArrayList<TeamViewModel> arrayViewList);
+    //void updatePlayerAdapter(ArrayList<PlayerDataModel> arrayList);
 }

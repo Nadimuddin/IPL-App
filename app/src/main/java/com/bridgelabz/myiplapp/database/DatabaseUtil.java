@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.bridgelabz.myiplapp.data_model.PlayerModel;
-import com.bridgelabz.myiplapp.data_model.TeamModel;
+import com.bridgelabz.myiplapp.data_model.PlayerDataModel;
+import com.bridgelabz.myiplapp.data_model.TeamDataModel;
 import com.bridgelabz.myiplapp.preference.SavePreference;
 
 import java.util.ArrayList;
@@ -30,14 +30,16 @@ public class DatabaseUtil extends SQLiteOpenHelper
 
     SavePreference pref;
 
+    //constructor
     public DatabaseUtil(Context context, String key)
     {
         super(context, DATABASE_NAME, null, 1);
         TABLE_NAME = key;
-        KEY = key+"_table";
+        KEY = key+"Table";
+
 
         pref = new SavePreference(context);
-        String temp = pref.getPreference(KEY);
+        String temp = pref.getStringPreference(KEY);
 
         if(temp == null || !temp.equals("table created"))
         {
@@ -85,18 +87,24 @@ public class DatabaseUtil extends SQLiteOpenHelper
 
     }
 
-    public long insertDataForTeam(ArrayList<TeamModel> arrayList)
+    public long insertDataForTeam(ArrayList<TeamDataModel> arrayList)
     {
         //get database to be writable
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         long result = 0;
-        TeamModel model;
+        TeamDataModel model;
+
+        //content values m
         ContentValues values = new ContentValues();
 
         for(int i=0; i<arrayList.size(); i++)
         {
+            //get current object
             model = arrayList.get(i);
+
+            /* putting data to DataModel class
+             */
             values.put(COL1, model.getTeamName());
             values.put(COL2, model.getTeamCaptain());
             values.put(COL3, model.getTeamCoach());
@@ -105,6 +113,7 @@ public class DatabaseUtil extends SQLiteOpenHelper
             values.put(COL6, model.getTeamBackgroundURL());
             values.put(COL7, model.getTeamLogo());
 
+            //insert data
             result =  sqLiteDatabase.insert(TABLE_NAME, null, values);
             if(result == -1)
                 break;
@@ -112,13 +121,13 @@ public class DatabaseUtil extends SQLiteOpenHelper
         return result;
     }
 
-    public long insertDataForPlayer(ArrayList<PlayerModel> arrayList)
+    public long insertDataForPlayer(ArrayList<PlayerDataModel> arrayList)
     {
         //get database to be writable
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
         long result = 0;
-        PlayerModel model;
+        PlayerDataModel model;
         ContentValues values = new ContentValues();
 
         for(int i=0; i<arrayList.size(); i++)
@@ -138,12 +147,15 @@ public class DatabaseUtil extends SQLiteOpenHelper
         }
         return result;
     }
+
     public Cursor retrieveData(String table_name)
     {
         SQLiteDatabase sqLiteDatabase = getReadableDatabase();
 
+        //execute a query in database
         Cursor result = sqLiteDatabase.rawQuery("select * from "+table_name, null);
 
+        //return result of query
         return result;
     }
 }

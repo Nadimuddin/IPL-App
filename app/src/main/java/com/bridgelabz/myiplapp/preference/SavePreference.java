@@ -24,10 +24,16 @@ public class SavePreference
         preferences=context.getSharedPreferences(PREFERENCE,mContext.MODE_PRIVATE);
     }
 
-    public String getPreference(String key)
+    //get String preference value
+    public String getStringPreference(String key)
     {
-        //get preference value for the given kye
         return preferences.getString(key, null);
+    }
+
+    //get int preference value
+    public int getIntPreferences(String key)
+    {
+        return preferences.getInt(key, 0);
     }
 
     public void setPreferences(String key, String stringToSet)
@@ -37,6 +43,18 @@ public class SavePreference
 
         //set preference value for the key
         editor.putString(key, stringToSet);
+
+        //apply changes to value
+        editor.apply();
+    }
+
+    public void setPreferences(String key, int valueToSet)
+    {
+        //initialize editor to edit preference value
+        SharedPreferences.Editor editor = preferences.edit();
+
+        //set preference value for the key
+        editor.putInt(key, valueToSet);
 
         //apply changes to value
         editor.apply();

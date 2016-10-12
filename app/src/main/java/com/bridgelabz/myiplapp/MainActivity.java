@@ -8,26 +8,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
-import com.bridgelabz.myiplapp.adapter.IPLAdapter;
+import com.bridgelabz.myiplapp.adapter.TeamAdapter;
 import com.bridgelabz.myiplapp.controller.TeamController;
+import com.bridgelabz.myiplapp.data_model.TeamDataModel;
 import com.bridgelabz.myiplapp.interfaces.UpdateTeamAdapter;
-import com.bridgelabz.myiplapp.data_model.TeamModel;
+import com.bridgelabz.myiplapp.view_model.TeamViewModel;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements UpdateTeamAdapter
 {
     RecyclerView mRecyclerView;
-    ArrayList<TeamModel> mArrayList;
+    ArrayList<TeamDataModel> mArrayList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-
-        mArrayList =new ArrayList<>();
-
         setContentView(R.layout.activity_main);
+
+        //initializing ArrayList
+        mArrayList =new ArrayList<>();
 
         //getting object of RecyclerView from XML
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerView);
@@ -39,15 +42,7 @@ public class MainActivity extends AppCompatActivity
         TeamController controller = new TeamController(this);
 
         //get data & set to adapter
-        controller.getData(new UpdateTeamAdapter() {
-            @Override
-            public void updateAdapter(ArrayList<TeamModel> arrayList)
-            {
-                IPLAdapter adapter =new IPLAdapter(arrayList);
-                mRecyclerView.setAdapter(adapter);
-            }
-
-        }, "team_info");
+        controller.getData(this, "team_info");
     }
 
     //method for setting layout for RecyclerView
@@ -60,4 +55,13 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
+    @Override
+    public void updateAdapter(ArrayList<TeamViewModel> arrayViewList)
+    {
+        //initialize adapter
+        TeamAdapter adapter =new TeamAdapter(arrayViewList);
+
+        //set adapter to RecyclerView
+        mRecyclerView.setAdapter(adapter);
+    }
 }

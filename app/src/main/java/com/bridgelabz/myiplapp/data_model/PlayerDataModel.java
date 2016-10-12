@@ -1,11 +1,9 @@
 package com.bridgelabz.myiplapp.data_model;
 
-import java.io.Serializable;
-
 /**
  * Created by Nadimuddin on 28/9/16.
  */
-public class PlayerModel implements Serializable
+public class PlayerDataModel// implements Serializable
 {
     String player_name;
     String player_batting_style;
@@ -14,21 +12,20 @@ public class PlayerModel implements Serializable
     String player_nationality;
     String player_role;
     String player_img_url;
-    String background_image_name;
 
-    public PlayerModel()
-    {
-
+    public PlayerDataModel() {
     }
 
-    public PlayerModel(String playerName, String battingStyle, String bowlingStyle, String dOB,
-                       String nationality,String role, String imageURL)
+    public PlayerDataModel(String playerName, String battingStyle, String bowlingStyle, String dOB,
+                           String nationality, String role, String imageURL)
     {
-
-    }
-    public String getBackgroundImageName()
-    {
-        return background_image_name;
+        player_name = playerName;
+        player_batting_style = battingStyle;
+        player_bowling_style = bowlingStyle;
+        player_dob = dOB;
+        player_nationality= nationality;
+        player_role = role;
+        player_img_url = imageURL;
     }
 
     public String getPlayerName()

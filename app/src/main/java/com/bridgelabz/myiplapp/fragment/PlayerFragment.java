@@ -8,32 +8,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.bridgelabz.myiplapp.R;
-import com.bridgelabz.myiplapp.data_model.PlayerModel;
 import com.bridgelabz.myiplapp.utility.DownloadImage;
 import com.bridgelabz.myiplapp.utility.ImageUtil;
 import com.bridgelabz.myiplapp.view_holder.ViewHolder;
+import com.bridgelabz.myiplapp.view_model.PlayerViewModel;
 
 /**
  * Created by Nadimuddin on 28/9/16.
  */
 public class PlayerFragment extends Fragment
 {
-    /*ImageView mPlayerPic;
-    TextView mPlayerName;
-    TextView mBattingStyle;
-    TextView mBowlingStyle;
-    TextView mDOB;
-    TextView mNationality;
-    TextView mRole;*/
     View mView;
     ImageUtil mImageUtil = new ImageUtil();
 
-    public static PlayerFragment getInstance(PlayerModel model)
+    public static PlayerFragment getInstance(PlayerViewModel model)
     {
         PlayerFragment playerFragment = new PlayerFragment();
         Bundle bundle=new Bundle();
 
-        //put object of PlayerModel to bundle
+        //put object of PlayerDataModel to bundle
         bundle.putSerializable("VALUE",model);
 
         //set argument to this fragment
@@ -54,17 +47,17 @@ public class PlayerFragment extends Fragment
 
         //get arguments in bundle
         Bundle bundle=getArguments();
-        PlayerModel playerModel= (PlayerModel) bundle.getSerializable("VALUE");
+        PlayerViewModel playerViewModel = (PlayerViewModel) bundle.getSerializable("VALUE");
 
-        setPlayerInfo(playerModel, holder);
+        setPlayerInfo(playerViewModel, holder);
 
         return mView;
     }
 
     //set player info on textView in layout
-    public void setPlayerInfo(PlayerModel model, ViewHolder holder)
+    public void setPlayerInfo(PlayerViewModel model, ViewHolder holder)
     {
-        holder.playerPic.setImageBitmap(getPlayerPic(model.getPlayerImgUrl(), holder));
+        holder.playerPic.setImageBitmap(getPlayerPic(model.getImageURL(), holder));
         holder.playerName.setText(model.getPlayerName());
         holder.battingStyle.setText(model.getBattingStyle());
         holder.bowlingStyle.setText(model.getBowlingStyle());
@@ -83,11 +76,9 @@ public class PlayerFragment extends Fragment
         //get image from local memory
         bitmap = mImageUtil.getImage(folderName, picName);
 
-        /*
-         *if image is present in local memory
+        /* if image is present in local memory
          * then return bitmap of that image
-         * otherwise download image from firebase
-         */
+         * otherwise download image from firebase */
         if(bitmap != null)
             return bitmap;
         else
